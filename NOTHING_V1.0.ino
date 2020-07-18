@@ -25,7 +25,6 @@ void loop() {
       deadLoop();
       break;
   }
-  buttonPressed();
   setValueSentOnAllFaces(blinkState);
 }
 
