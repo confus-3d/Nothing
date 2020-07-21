@@ -5,24 +5,32 @@ Timer deathTimer;
 Timer switchTimer;
 
 enum blinkState {ALIVE, DEAD};
-int blinkState = ALIVE;
+byte blinkState = ALIVE;
 
 byte hue=0;
 Timer nextStep;
 byte dead=0;
-int numNeighbors = 0;
-int pastNeighbors = 0;
+byte numNeighbors = 0;
+byte pastNeighbors = 0;
+byte firstRun = 0;
 
 void setup() {
   // put your setup code here, to run once
 }
 
 void loop() {
+  numNeighbors = 0;
    FOREACH_FACE(f) {
     if ( !isValueReceivedOnFaceExpired( f ) ) {      // Have we seen an neighbor on this face recently?
     numNeighbors++;
   }
- }
+}
+  
+  if (firstRun == 0) { 
+    pastNeighbors = numNeighbors; 
+    firstRun++;
+  }
+  
   switch (blinkState) {
     case ALIVE:
       aliveLoop();
@@ -33,18 +41,16 @@ void loop() {
       break;
   }
   buttonPressed();
-  setValueSentOnAllFaces(1);
+  setValueSentOnAllFaces(blinkState);
 }
 
 void aliveLoop(){
   if(buttonPressed()){
     deathTimer.set(DEATH_INTERVAL);
-    switchTimer.set(DEATH_SWITCH);
     blinkState = DEAD;
   }
   if (pastNeighbors != numNeighbors) {
     deathTimer.set(DEATH_INTERVAL);
-    pastNeighbors = numNeighbors;
     blinkState = DEAD;
   }
 }
