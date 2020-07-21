@@ -16,7 +16,6 @@ byte firstRun = 0;
 
 void setup() {
   // put your setup code here, to run once
-  switchTimer.set(DEATH_SWITCH*2);
 }
 
 void loop() {
@@ -62,7 +61,7 @@ if (nextStep.isExpired()) {
 void deadLoop(){
 
   if (firstRun == 0) { 
-    pastNeighbors = numNeighbors; 
+    deathTimer.set(DEATH_SWITCH*2);
     firstRun++;
   }
   
