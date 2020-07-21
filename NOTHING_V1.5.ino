@@ -23,10 +23,9 @@ void loop() {
    FOREACH_FACE(f) {
     if ( !isValueReceivedOnFaceExpired( f ) ) {      // Have we seen an neighbor on this face recently?
     numNeighbors++;
-  }
-}
-  
-switch (blinkState) {
+    }
+  } 
+  switch (blinkState) {
     case ALIVE:
       aliveLoop();
       aliveDisplay();
@@ -34,24 +33,20 @@ switch (blinkState) {
     case DEAD:
       deadLoop();
       break;
-}
-buttonPressed();
-setValueSentOnAllFaces(blinkState);
+  }
+  buttonPressed();
+  setValueSentOnAllFaces(blinkState);
 }
 
 void aliveLoop(){
-  if(buttonPressed()){
-    deathTimer.set(DEATH_INTERVAL);
-    blinkState = DEAD;
-  }
-  if (pastNeighbors != numNeighbors) {
+  if(buttonPressed() || pastNeighbors != numNeighbors){
     deathTimer.set(DEATH_INTERVAL);
     blinkState = DEAD;
   }
 }
 
 void aliveDisplay(){
-if (nextStep.isExpired()) {
+  if (nextStep.isExpired()) {
     setColor( makeColorHSB( hue , 255 , 255 ) );
     hue++;     
     nextStep.set(40);
@@ -59,12 +54,10 @@ if (nextStep.isExpired()) {
 }
 
 void deadLoop(){
-
   if (firstRun == 0) { 
     deathTimer.set(DEATH_SWITCH*2);
     firstRun++;
   }
-  
   if (deathTimer.isExpired()) {
     blinkState = ALIVE;
   }
